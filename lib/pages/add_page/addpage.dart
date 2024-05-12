@@ -26,6 +26,7 @@ class AddTaskController extends GetxController {
     await dbHelper.insertTask(task);
     taskName.value = '';
     textEditingController.clear();
+    Get.back(result: "reload");
   }
 }
 

@@ -17,6 +17,7 @@ class TaskController extends GetxController {
   void updateTask(taskID) {
     var task = Task(id: taskID, taskName: taskName.value);
     dbHelper.updateTask(task);
+    Get.back(result: "reload");
   }
 
   @override
@@ -51,46 +52,54 @@ class EditTaskPage extends StatelessWidget {
           onPressed: () => Get.back(result: "reload"),
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: TextField(
-              onChanged: (value) => controller.updateTaskName(value),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Task Name",
+              style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w400),
+            ),
+            SizedBox(height: 8),
+            TextField(
               decoration: InputDecoration(
-                labelText: 'Task Name',
-                hintText: 'Enter task name',
-              ),
-              controller: TextEditingController.fromValue(
-                TextEditingValue(
-                  text: controller.taskName.value,
-                  selection: TextSelection.collapsed(
-                      offset: controller.taskName.value.length),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(9.0),
                 ),
+                filled: true,
+                hintStyle: TextStyle(
+                    color: Get.theme.primaryColor, fontWeight: FontWeight.w400),
+                hintText: "",
+                fillColor: Colors.white70,
               ),
+              onChanged: (value) => controller.updateTaskName(value),
             ),
-          ),
-          Expanded(child: SizedBox()),
-          Padding(
-            padding: const EdgeInsets.all(30),
-            child: FractionallySizedBox(
-              widthFactor: 1,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Get.theme.primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(6.0),
+            Expanded(child: SizedBox()),
+            Padding(
+              padding: const EdgeInsets.all(30),
+              child: FractionallySizedBox(
+                widthFactor: 1,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Get.theme.primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(6.0),
+                    ),
                   ),
+                  onPressed: () {
+                    controller.updateTask(controller.editTask.id ?? 0);
+                  },
+                  child:
+                      const Text('Save', style: TextStyle(color: Colors.white)),
                 ),
-                onPressed: () {
-                  controller.updateTask(controller.editTask.id ?? 0);
-                },
-                child:
-                    const Text('Save', style: TextStyle(color: Colors.white)),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
